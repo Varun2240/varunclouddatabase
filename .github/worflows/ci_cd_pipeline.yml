@@ -1,0 +1,40 @@
+name: Execute Python Script
+
+# Trigger the workflow on push to the 'main' branch
+on:
+  push:
+    branches:
+      - main
+
+# Define the jobs to be run
+jobs:
+  run-python-script:
+    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
+
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # Set up Python environment
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.8'  # Specify Python version (e.g., 3.8, 3.9, 3.10)
+
+    # Install PyMySQL directly
+    # 
+    # 
+    - name: Install PyMySQL
+      run: |
+        pip install PyMySQL
+
+    # Run the Python script
+    - name: Run Python Script
+      run: |
+        python automateworkflow.py
+      env:  # Passing secrets to the Python script as environment variables
+        HOST: ${{ secrets.HOST }}
+        USER: ${{ secrets.USER }}
+        PASSWORD: ${{ secrets.PASSWORD }}
+        DATABASE: ${{ secrets.DATABASE }}
